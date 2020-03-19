@@ -1,7 +1,7 @@
 from .table import create_table, create_table_rows
 from urmarketscraper import market
 from urcollectionmanager import api
-from requests import Session
+from requests import Session, get
 from pathlib import Path
 from itertools import islice
 from email.mime.text import MIMEText
@@ -14,8 +14,13 @@ import smtplib
 def generate_email():
     with Session() as session:
         # TODO - Get this from S3 not Desktop
+        url = "https://ohbucketmybucket.s3-us-west-1.amazonaws.com/collection.sqlite"
+        #file_path = "C:\\Users\\phant\\Desktop\\database\\collection2.sqlite"
+        file_path = os.environ["DB_FILE_PATH"]
+        with get(url) as response, open(file_path, 'wb') as out_file:
+            out_file.write(response.content)
         api.connect_and_initialize_database("sqlite",
-                                            str(Path(os.environ["USERPROFILE"] + "\Desktop\database\collection.sqlite")))
+                                            str(Path(file_path)))
         api.session_connect_to_ur(
             session, os.environ["UR_USER"], os.environ["UR_PASS"])
         full_purchases = api.get_history_from_database()
