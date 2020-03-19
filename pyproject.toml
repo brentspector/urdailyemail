@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "urdailyemail"
+version = "0.1.0"
+description = ""
+authors = ["Brent Spector <brent.spector@yahoo.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+dominate = "^2.5.1"
+urmarketscraper = "^1.0.1"
+urcollectionmanager = "^1.0.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+pre-commit = "^2.2.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
