@@ -21,6 +21,8 @@ def create_table_rows(purchases, offers):
         in purchases
     ]
 
+    obj_table_rows = sorted(obj_table_rows, key=lambda o: o.min_percent)
+
     html_table_rows = [
         _create_html_table_row(tr_obj)
         for tr_obj
