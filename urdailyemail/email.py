@@ -1,6 +1,7 @@
-from .table import create_table, create_table_rows
+from .table import create_table, create_table_rows, create_market_mission_table
 from urmarketscraper import market
 from urcollectionmanager import api
+from urcollectionmanager.purchase import Purchase
 from requests import Session, get
 from pathlib import Path
 from itertools import islice
@@ -9,40 +10,75 @@ from email.mime.multipart import MIMEMultipart
 import os
 import ssl
 import smtplib
+import re
 
 
 def generate_email():
     with Session() as session:
+        # Set up database and session initialization
         url = "https://ohbucketmybucket.s3-us-west-1.amazonaws.com/collection.sqlite"
-        #file_path = "C:\\Users\\phant\\Desktop\\database\\collection2.sqlite"
-        file_path = os.environ["DB_FILE_PATH"]
+        file_path = Path(os.environ["USERPROFILE"] +
+                         "\Desktop\database\collection.sqlite")
+        #file_path = os.environ["DB_FILE_PATH"]
         with get(url) as response, open(file_path, 'wb') as out_file:
             out_file.write(response.content)
         api.connect_and_initialize_database("sqlite",
                                             str(Path(file_path)))
         api.session_connect_to_ur(
             session, os.environ["UR_USER"], os.environ["UR_PASS"])
+
+        # Get purchases from database to check against
         full_purchases = api.get_history_from_database()
         purchases = list(
-            islice((purchase for purchase in full_purchases), os.environ["PURCHASE_COUNT"]))
+            islice((purchase for purchase in full_purchases), int(os.environ["PURCHASE_COUNT"])))
+
+        # Get market offers for purchases
         offers = market.get_market_offers(
             session, [purchase.id for purchase in purchases])
+
+        # Get black market flash mission
+        missions = api.convert_missions(
+            api.get_missions_list(session, "flash"))
+        bm_mission = next(
+            mission for mission in missions if "BLACK MARKET" in mission.name)
+        bm_mission_character = re.search('-(.+?)(\\D+)->', bm_mission.name)
+        if bm_mission_character:
+            bm_mission_character = str(bm_mission_character.group(2)).strip()
+        bm_offers = market.get_market_offers(
+            session, [bm_mission_character])
+
+        # Create table for email
         table_rows = create_table_rows(purchases, offers)
-        final_content = create_table(table_rows)
+        mission_table = create_market_mission_table(
+            bm_mission, bm_offers[bm_mission_character])
+        final_content = create_table(table_rows, mission_table)
         _send_email(final_content)
     return "OK"
 
 
 def _populate_db():
+    """
+    Run with `python -c "from urdailyemail import email; email._populate_db()"`
+    :return:
+    """
     with Session() as session:
-        api.session_connect_to_ur(
-            session, os.environ["UR_USER"], os.environ["UR_PASS"])
-        purchases_soup = api.get_purchase_history(session, 5)
-        purchases = {item.id: item for sublist in api.convert_purchase_history(purchases_soup)
-                     for item in sublist}
+        # api.session_connect_to_ur(
+        #    session, os.environ["UR_USER"], os.environ["UR_PASS"])
+        #purchases_soup = api.get_purchase_history(session, 5)
+        # purchases = {item.id: item for sublist in api.convert_purchase_history(purchases_soup)
+        #             for item in sublist}
         api.connect_and_initialize_database("sqlite", str(
             Path(os.environ["USERPROFILE"] + "\Desktop\database\collection.sqlite")))
-        api.write_history_to_database([item for item in purchases.values()])
+        purchases = []
+        purchases.append(Purchase(name="Nameko", id=1540, price=3500, level=3))
+        purchases.append(Purchase(name="Guillotinette",
+                                  id=1638, price=1000, level=5))
+        purchases.append(
+            Purchase(name="Gus Rope", id=1632, price=10000, level=3))
+        purchases.append(
+            Purchase(name="Sopiket", id=1703, price=7000, level=3))
+        purchases.append(Purchase(name="Lucky", id=1338, price=2500, level=2))
+        api.write_history_to_database([item for item in purchases])
 
 
 def _send_email(content):

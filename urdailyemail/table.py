@@ -2,7 +2,7 @@ from .table_row import TableRow
 from dominate.tags import html, body, table, thead, tbody, tr, th, td, div
 
 
-def create_table(table_rows):
+def create_table(table_rows, *content):
     html_table = table(cellspacing="0", cellpadding="5", width="100%",
                        margin="0 auto", border="1", style="white-space:nowrap;")
     with html_table.add(thead()).add(tr()):
@@ -11,7 +11,7 @@ def create_table(table_rows):
             th(val)
     with html_table:
         tbody(table_rows)
-    return html(body(table(tr(td(html_table)))))
+    return html(body(table(tr(td(html_table, *content)))))
 
 
 def create_table_rows(purchases, offers):
@@ -31,6 +31,17 @@ def create_table_rows(purchases, offers):
 
     html_table_rows.append(_summate_values(obj_table_rows))
     return html_table_rows
+
+
+def create_market_mission_table(mission, offer):
+    html_table = table(cellspacing="0", cellpadding="5", width="30%",
+                       margin="0 auto", border="1", style="white-space:nowrap;")
+    with html_table.add(thead()).add(tr()):
+        for val in ["mission", "value"]:
+            th(val)
+    with html_table:
+        tbody(tr(td(mission.name), td(offer.get_min_price())))
+    return html_table
 
 
 def _create_obj_table_row(purchase, offer):

@@ -8,7 +8,7 @@ authors = ["Brent Spector <brent.spector@yahoo.com>"]
 python = "^3.8"
 dominate = "^2.5.1"
 urmarketscraper = "^1.0.1"
-urcollectionmanager = "^1.0.0"
+urcollectionmanager = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
