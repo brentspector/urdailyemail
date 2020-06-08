@@ -17,9 +17,9 @@ def generate_email():
     with Session() as session:
         # Set up database and session initialization
         url = "https://ohbucketmybucket.s3-us-west-1.amazonaws.com/collection.sqlite"
-        file_path = Path(os.environ["USERPROFILE"] +
-                         "\Desktop\database\collection.sqlite")
-        #file_path = os.environ["DB_FILE_PATH"]
+        # file_path = Path(os.environ["USERPROFILE"] +
+        #                  "\Desktop\database\collection.sqlite")
+        file_path = os.environ["DB_FILE_PATH"]
         with get(url) as response, open(file_path, 'wb') as out_file:
             out_file.write(response.content)
         api.connect_and_initialize_database("sqlite",
