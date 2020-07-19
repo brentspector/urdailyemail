@@ -300,7 +300,7 @@ description = "API for Urban Rivals collection management"
 name = "urcollectionmanager"
 optional = false
 python-versions = ">=3.8.0,<4.0.0"
-version = "1.1.0"
+version = "1.1.3"
 
 [package.dependencies]
 bs4 = ">=0.0.1,<0.0.2"
@@ -326,7 +326,7 @@ description = "Collects market offers for Urban Rivals."
 name = "urmarketscraper"
 optional = false
 python-versions = ">=3.8,<4.0"
-version = "1.0.1"
+version = "1.1.0"
 
 [package.dependencies]
 bs4 = ">=0.0.1,<0.0.2"
@@ -510,16 +510,16 @@ toml = [
     {file = "toml-0.10.0.tar.gz", hash = "sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"},
 ]
 urcollectionmanager = [
-    {file = "urcollectionmanager-1.1.0-py3-none-any.whl", hash = "sha256:296d10b06c91ec8d1ea78efa518fc617365f0261279b30f2a9964201662be959"},
-    {file = "urcollectionmanager-1.1.0.tar.gz", hash = "sha256:ff512b2bb546a3587e35744df973deb5f282c1d564693cb480c2b99e57a750e2"},
+    {file = "urcollectionmanager-1.1.3-py3-none-any.whl", hash = "sha256:a17045af990f726ae80613f970be2a99c9c4be6507caa7339ab4cc3c3c399ace"},
+    {file = "urcollectionmanager-1.1.3.tar.gz", hash = "sha256:28960a3adf507a38cdb481331c61f58f2d3c12dbb7473cfca791cb1bf17bdb7f"},
 ]
 urllib3 = [
     {file = "urllib3-1.25.8-py2.py3-none-any.whl", hash = "sha256:2f3db8b19923a873b3e5256dc9c2dedfa883e33d87c690d9c7913e1f40673cdc"},
     {file = "urllib3-1.25.8.tar.gz", hash = "sha256:87716c2d2a7121198ebcb7ce7cccf6ce5e9ba539041cfbaeecfb641dc0bf6acc"},
 ]
 urmarketscraper = [
-    {file = "urmarketscraper-1.0.1-py3-none-any.whl", hash = "sha256:92a841450973ca8aaaea3aad55153e04ada8868b40e0fa2e6544b68555e360e6"},
-    {file = "urmarketscraper-1.0.1.tar.gz", hash = "sha256:a46ec1373b6a2c9742f5073657ae68b9947fc01d012e3f0ca91f31ce44f88c1e"},
+    {file = "urmarketscraper-1.1.0-py3-none-any.whl", hash = "sha256:7617cfeea1582e3ece081666bfdeb1781cdc4b475c74eeb8cbe314abd35fdf64"},
+    {file = "urmarketscraper-1.1.0.tar.gz", hash = "sha256:2fc979f07da2c888fe074c3835a0485f21a926dcbe3c35a4284ef1155e245fc8"},
 ]
 virtualenv = [
     {file = "virtualenv-20.0.13-py2.py3-none-any.whl", hash = "sha256:87831f1070534b636fea2241dd66f3afe37ac9041bcca6d0af3215cdcfbf7d82"},

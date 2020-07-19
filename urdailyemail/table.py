@@ -1,5 +1,6 @@
 from .table_row import TableRow
-from dominate.tags import html, body, table, thead, tbody, tr, th, td, div
+from dominate.tags import html, body, table, thead, tbody, tr, th, td
+import logging
 
 
 def create_table(table_rows, *content):
@@ -33,14 +34,25 @@ def create_table_rows(purchases, offers):
     return html_table_rows
 
 
-def create_market_mission_table(mission, offer):
+def create_market_mission_table(missions, offers):
     html_table = table(cellspacing="0", cellpadding="5", width="30%",
                        margin="0 auto", border="1", style="white-space:nowrap;")
     with html_table.add(thead()).add(tr()):
         for val in ["mission", "value"]:
             th(val)
     with html_table:
-        tbody(tr(td(mission.name), td(offer.get_min_price())))
+        if not offers:
+            name_val = missions[0] if missions else "N/A"
+            tbody(tr(td(name_val), td("N/A")))
+        else:
+            for mission in missions:
+                try:
+                    offer_price = offers[mission.name].get_min_price()
+                except Exception as exception:
+                    logging.error("Failed to tabulate %s", mission.name)
+                    logging.error(str(exception))
+                    offer_price = "N/A"
+                tbody(tr(td(mission.name), td(offer_price)))
     return html_table
 
 
